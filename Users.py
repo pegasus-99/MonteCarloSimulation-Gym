@@ -1,6 +1,6 @@
 class Users:
 
-    def __init__(self):
+    def __init__(self, userName: str, userType: str, userPatience: str):
         pass
 
     def get_users(self):
@@ -16,6 +16,7 @@ class Users:
 
     def add_to_queue(self):
         pass
+
 
 if __name__ == "__main__":
     pass
