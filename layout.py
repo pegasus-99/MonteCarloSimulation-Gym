@@ -10,7 +10,11 @@ class Machine:
     def create_layout(self):
         pass
 
+    def get_user(self):
+        pass
 
+    def set_user(self):
+        pass
 
 
 
