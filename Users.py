@@ -1,20 +1,18 @@
 class Users:
 
-    def __init__(self, userName: str, userType: str, userPatience: str):
+    def __init__(self, userName: str, userType: str, userPatience: str, timeDelta: float):
         pass
 
-    def get_users(self):
+    def get(self):
         pass
 
-    def set_users(self):
+    def set(self):
+        # TODO: update time delta
         pass
 
     def assign_properties(self):
         # TODO: assign rigid/flexible
         # TODO: assign impatience
-        pass
-
-    def add_to_queue(self):
         pass
 
 
