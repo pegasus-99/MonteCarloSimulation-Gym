@@ -1,6 +1,5 @@
 import random
 class Users:
-
     def __init__(self, userName: str, userType: str, userPatience: str,
                  timeDelta: float, viewPower: int, userID: str, userDict: dict):
         """
@@ -32,30 +31,27 @@ class Users:
         userDict[self.userID] = [self.userName, userType, userPatience, self.viewPower, self.timeDelta]
         return userDict
 
-    def set(self, userDict, elapsedTime: float):
+    def set(self, elapsedTime: float):
         """
         edit time elapsed
         Note: elapsedTime will either be gotten from class Machine or class Layout
-        :param userDict: the dictionary of all users and their properties
         :param elapsedTime: time worked out till now
         :return: updated user dictionary
         """
-        for key in userDict.keys():
-            userDict[key][-1] += elapsedTime
-        return userDict
+        for key in self.userDict.keys():
+            self.userDict[key][-1] += elapsedTime
+        return self.userDict
 
-    def assign_properties(self, userType, userPatience):
+    def assign_properties(self):
         """
         Assign user properties randomly
-        :param userType: choose from rigid or flexible
-        :param userPatience: choose from patient or impatient
         :return: the randomly selected type and patience
         """
-        type = ['rigid', 'flexible']
-        pat = ['patient', 'impatient']
-        userType = random.choice(type)
-        userPatience = random.choice(pat)
-        return userType, userPatience
+        ironheadType = ['rigid', 'flexible']
+        ironheadPat = ['patient', 'impatient']
+        self.userType = random.choice(ironheadType)
+        self.userPatience = random.choice(ironheadPat)
+        return self.userType, self.userPatience
 
 
 if __name__ == "__main__":
