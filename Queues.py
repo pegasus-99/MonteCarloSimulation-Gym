@@ -1,5 +1,4 @@
 def make_queue(machine_name: object):
-    x=1
     pass
 
 
