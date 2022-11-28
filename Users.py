@@ -3,6 +3,16 @@ class Users:
 
     def __init__(self, userName: str, userType: str, userPatience: str,
                  timeDelta: float, viewPower: int, userID: str, userDict: dict):
+        """
+        This function initializes the required parameters of a user
+        :param userName: first name of the user
+        :param userType: rigid or flexible
+        :param userPatience: patient or impatient
+        :param timeDelta: initializes time spent by user in the gym
+        :param viewPower: the field of view of each user
+        :param userID: Unique ID assigned to each user
+        :param userDict: initializes a dictionary of users
+        """
         self.userName = userName
         self.userType = userType
         self.userPatience = userPatience
@@ -12,17 +22,35 @@ class Users:
         self.userDict = {}
 
     def get(self, userDict, userType, userPatience):
+        """
+        This method gets information about the user
+        :param userDict: the dictionary of all users and their initialized properties
+        :param userType: type of user randomly assigned from assign_properties()
+        :param userPatience: user patience randomly assigned from assign_properties()
+        :return: current user's dictionary
+        """
         userDict[self.userID] = [self.userName, userType, userPatience, self.viewPower, self.timeDelta]
         return userDict
 
     def set(self, userDict, elapsedTime: float):
+        """
+        edit time elapsed
+        Note: elapsedTime will either be gotten from class Machine or class Layout
+        :param userDict: the dictionary of all users and their properties
+        :param elapsedTime: time worked out till now
+        :return: updated user dictionary
+        """
         for key in userDict.keys():
             userDict[key][-1] += elapsedTime
         return userDict
 
     def assign_properties(self, userType, userPatience):
-        # TODO: assign rigid/flexible
-        # TODO: assign impatience
+        """
+        Assign user properties randomly
+        :param userType: choose from rigid or flexible
+        :param userPatience: choose from patient or impatient
+        :return: the randomly selected type and patience
+        """
         type = ['rigid', 'flexible']
         pat = ['patient', 'impatient']
         userType = random.choice(type)
