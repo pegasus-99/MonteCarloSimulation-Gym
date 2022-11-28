@@ -1,7 +1,10 @@
 class Users:
 
     def __init__(self, userName: str, userType: str, userPatience: str, timeDelta: float, viewPower: int):
-        pass
+        self.userName = userName
+        self.userPatience = userPatience
+        self.timeDelta = 0.0
+        self.viewPower = 6
 
     def get(self):
         pass
