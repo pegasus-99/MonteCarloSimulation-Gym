@@ -1,3 +1,4 @@
+from itertools import permutations
 class Layout:
 
     def __init__(self, totalFloors:int, totalMachines:int, machineNumber:float, machineType:str):
@@ -6,6 +7,11 @@ class Layout:
         self.machineNumber = machineNumber
         self.machineType = machineType
 
+
+    test1 = [1, 2, 3, 4, 5]
+    test2 = [list(p) for p in permutations(test1)]
+    print(len(test2))
+    print(test2)
 
     def create_machine_space(self):
         # Create ndarray depending upon floors
