@@ -1,6 +1,6 @@
 class Users:
 
-    def __init__(self, userName: str, userType: str, userPatience: str, timeDelta: float):
+    def __init__(self, userName: str, userType: str, userPatience: str, timeDelta: float, viewPower: int):
         pass
 
     def get(self):
