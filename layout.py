@@ -18,13 +18,17 @@ class Layout:
         # Create every possible layout depending on number of machines
         pass
 
+    def find_new_machine(self, currentUserMachine: float, fieldOfView: int):
+        # Checks current machine of user
+        # Finds machine in field of view
+        # Returns all machine numbers in field of view
+        pass
+
     def get(self):
         pass
 
     def set(self):
         pass
-
-
 
 
 if __name__ == "__main__":
