@@ -34,7 +34,7 @@ class Users:
     def set(self, elapsedTime: float):
         """
         edit time elapsed
-        Note: elapsedTime will either be gotten from class Machine or class Layout
+        TODO: elapsedTime will either be gotten from class Machine or class Layout
         :param elapsedTime: time worked out till now
         :return: updated user dictionary
         """
