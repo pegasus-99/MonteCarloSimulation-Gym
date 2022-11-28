@@ -7,7 +7,7 @@ class Users:
         self.viewPower = 6
 
     def get(self):
-        pass
+        return self.userName, self.userPatience, self.timeDelta, self.viewPower
 
     def set(self):
         # TODO: update time delta
