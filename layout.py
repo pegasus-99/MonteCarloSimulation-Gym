@@ -1,4 +1,5 @@
 from itertools import permutations
+import numpy as np
 class Layout:
 
     def __init__(self, totalFloors:int, totalMachines:int, machineNumber:float, machineType:str):
@@ -7,22 +8,48 @@ class Layout:
         self.machineNumber = machineNumber
         self.machineType = machineType
 
+    def create_layout_combination(self, floor):
+        # Join machines floor-wise
+        # Create every possible layout depending on number of machines
 
-    test1 = [1, 2, 3, 4, 5]
-    test2 = [list(p) for p in permutations(test1)]
-    print(len(test2))
-    print(test2)
+        floorLayout = [list(p) for p in permutations(floor)]
+        return floorLayout
 
     def create_machine_space(self):
         # Create ndarray depending upon floors
         # Create 3x3 numpy array
         # Add unique machine number at the centre
-        pass
 
-    def create_layout(self):
-        # Join machines floor-wise
-        # Create every possible layout depending on number of machines
-        pass
+        floorLayout1 = []
+        floorLayout2 = []
+
+        if self.totalMachines % 2 == 0:
+            floor1 = self.totalMachines/2
+            floor2 = self.totalMachines - floor1
+        else:
+            floor1 = self.totalMachines+1/2
+            floor2 = self.totalMachines - floor1
+
+        # Create machine space for floor 1
+        for i in range(len(floor1)):
+            arr1 = np.array([[np.nan, np.nan, np.nan],
+                            [np.nan, i + 1, np.nan],
+                            [np.nan, np.nan, np.nan]])
+
+            floorLayout1.append(arr1)
+
+        # Create machine space for floor 2
+        for i in range(len(floor2)):
+            arr2 = np.array([[np.nan, np.nan, np.nan],
+                            [np.nan, i + 1, np.nan],
+                            [np.nan, np.nan, np.nan]])
+
+            floorLayout2.append(arr2)
+
+        # Creating layout combination for both floors
+        self.create_layout_combination(floor=floorLayout1)
+        self.create_layout_combination(floor=floorLayout2)
+
 
     def find_new_machine(self, currentUserMachine: float, fieldOfView: int):
         # Checks current machine of user
