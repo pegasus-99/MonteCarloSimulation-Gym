@@ -9,9 +9,9 @@ class Layout:
         self.machineType = machineType
 
     def create_layout_combination(self, floor):
+
         # Join machines floor-wise
         # Create every possible layout depending on number of machines
-
         floorLayout = [list(p) for p in permutations(floor)]
         return floorLayout
 
@@ -20,9 +20,12 @@ class Layout:
         # Create 3x3 numpy array
         # Add unique machine number at the centre
 
+        # Creating empty list for floors
         floorLayout1 = []
         floorLayout2 = []
 
+        # If machine count = even, we assign them equally to each floor
+        # If machine count = odd, floor1 will have more machines than floor2
         if self.totalMachines % 2 == 0:
             floor1 = self.totalMachines/2
             floor2 = self.totalMachines - floor1
