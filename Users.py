@@ -20,18 +20,13 @@ class Users:
         self.userID = userID
         self.userDict = userDict
 
-    def get(self, userDict, userType, userPatience, timeDelta, viewPower):
+    def get(self):
         """
         This method gets information about the user
-        :param viewPower: The field of view of the user initialized from assign_properties()
-        :param timeDelta: the time spent working out initialized from assign_properties()
-        :param userDict: the dictionary of all users and their initialized properties from assign_properties()
-        :param userType: type of user randomly assigned from assign_properties()
-        :param userPatience: user patience randomly assigned from assign_properties()
         :return: current user's dictionary
         """
-        userDict[self.userID] = [self.userName, userType, userPatience, viewPower, timeDelta]
-        return userDict
+        self.userDict[self.userID] = [self.userName, self.userType, self.userPatience, self.viewPower, self.timeDelta]
+        return self.userDict
 
     def set(self, elapsedTime: float):
         """
