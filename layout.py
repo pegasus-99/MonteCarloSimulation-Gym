@@ -16,6 +16,16 @@ class Layout:
         return floorLayout
 
     def create_machine_space(self):
+
+        """
+        a = np.empty((6,6,), dtype = int)
+for i in range(1, a.shape[0], 3):
+    for j in range(1, a.shape[1], 3):
+        a[i,j] = 7
+        :return:
+        """
+
+
         # Create ndarray depending upon floors
         # Create 3x3 numpy array
         # Add unique machine number at the centre
@@ -66,6 +76,7 @@ class Layout:
     def set(self):
         pass
 
-
+    def find_machine_position(machine):
+        pass
 if __name__ == "__main__":
     pass
