@@ -45,6 +45,10 @@ class Users:
         :return: the randomly selected type and patience and assigned viewPower and initialize time delta to 0
                  and the initialized user dictionary
         """
+        # ironheadName = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']
+        # self.userName = random.choice(ironheadName)
+        # ironheadID = range(0,1000)
+        # self.userID = random.sample(ironheadID, 1)
         ironheadType = ['rigid', 'flexible']
         ironheadPat = ['patient', 'impatient']
         self.userType = random.choice(ironheadType)
