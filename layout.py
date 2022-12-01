@@ -9,37 +9,15 @@ class Layout:
         :param machineNumber:
         :param machineType:
         """
-        self.totalFloors = totalFloors
+        #self.totalFloors = totalFloors
         self.totalMachines = totalMachines
         self.machineNumber = machineNumber
         self.machineType = machineType
 
-    def create_layout_combination(self, floor):
-        """
-        :param floor:
-        :return:
-        """
-
-        # Create every possible layout depending on number of machines
-
-        floor = [i+1 for i in range(self.totalMachines)]
-        floorLayoutCombo = [list(machine) for machine in permutations(floor)]
-
-        return floorLayoutCombo
-
     def create_machine_space(self):
         """
-        This functions creates a 3x3 array for each machine with unique machine number at the centre.
         :return: List containing all machine arrays
         """
-
-        # Creating empty list for floors
-        floorLayout1 = []
-        floorLayout2 = []
-
-        # If machine count = even, we assign them equally to each floor
-        # If machine count = odd, floor1 will have more machines than floor2
-
 
         # Row-wise layout
         # Keeping number of rows fixed = 2, columns
@@ -55,35 +33,30 @@ class Layout:
         layoutCols = row1*3
         layoutRows = 6
 
+        return layoutRows, layoutCols
 
 
-        # if self.totalMachines % 2 == 0:
-        #     floor1 = self.totalMachines/2
-        #     floor2 = self.totalMachines - floor1
-        # else:
-        #     floor1 = self.totalMachines+1/2
-        #     floor2 = self.totalMachines - floor1
-        #
-        # # Create machine space for floor 1
-        # for i in range(len(floor1)):
-        #     arr1 = np.array([[np.nan, np.nan, np.nan],
-        #                     [np.nan, i + 1, np.nan],
-        #                     [np.nan, np.nan, np.nan]])
-        #
-        #     floorLayout1.append(arr1)
-        #
-        # # Create machine space for floor 2
-        # for i in range(len(floor2)):
-        #     arr2 = np.array([[np.nan, np.nan, np.nan],
-        #                     [np.nan, i + 1, np.nan],
-        #                     [np.nan, np.nan, np.nan]])
-        #
-        #     floorLayout2.append(arr2)
+    def create_layout_combination(self):
+        """
+
+        :return:
+        """
+
+        # Get machine rows and columns
+        row, col = self.create_machine_space(self)
 
 
-        # Creating layout combination for both floors
-        # self.create_layout_combination(floor=floorLayout1)
-        # self.create_layout_combination(floor=floorLayout2)
+
+        # Create every possible layout depending on number of machines
+        machines = [i + 1 for i in range(self.totalMachines)]
+        floorLayout = [list(machine) for machine in permutations(machines)]
+
+        # Add machines to machineArea
+        # Create array for machine space
+        machineArea = np.empty((row, col,))
+        machineArea[:] = np.nan
+
+
 
 
     def find_new_machine(self, currentUserMachine: float, fieldOfView: int):
