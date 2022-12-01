@@ -81,6 +81,13 @@ class Layout:
 
     def find_new_machine(self, currentUserMachine: float, fieldOfView: int):
         """
+        Req:
+        1. current layout
+        2. current machine
+        3. current queue length
+        4. field of view - find all machines
+        5. get queue length of all machines from 4
+
         :param currentUserMachine:
         :param fieldOfView:
         :return:
@@ -97,7 +104,6 @@ class Layout:
     def set(self):
         pass
 
-    def find_machine_position(machine):
-        pass
+
 if __name__ == "__main__":
     pass
