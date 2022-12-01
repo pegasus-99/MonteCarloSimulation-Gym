@@ -36,7 +36,12 @@ def check_queue(machineList: object):
                     pass
 
 
-
+def remove_from_queue(machine: object, user: object):
+    try:
+        machine.queue.remove(user)
+        return True
+    except Exception as e:
+        return False
 
 if __name__ == '__main__':
     pass
