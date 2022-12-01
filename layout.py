@@ -15,11 +15,7 @@ class Layout:
         #self.machineType = machineType
 
     def create_machine_space(self):
-        """
-        Function is called in - create_layout
-        :return: (rows, cols of individual machine)
-                 and (nested list containing all combinations)
-        """
+
 
         # Row-wise layout
         # Keeping number of rows fixed = 2, columns
@@ -101,6 +97,7 @@ class Layout:
     def set(self):
         pass
 
-
+    def find_machine_position(machine):
+        pass
 if __name__ == "__main__":
     pass
