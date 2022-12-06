@@ -37,7 +37,7 @@ class Layout:
         return layoutRows, layoutCols, layoutCombination
 
 
-    def create_layout(self):
+    def create_layouts(self):
         """
         Function is called in - create_layout_combination
         :param floorLayout:
@@ -54,7 +54,7 @@ class Layout:
 
         for layout in layoutCombination:
 
-            # Creating empty numpy array which denotes machine space
+            # Creating empty numpy array which is the machine space
             machineArea = np.empty((rows, cols,))
             machineArea[:] = np.nan
 
@@ -65,7 +65,7 @@ class Layout:
             for row in range(1, machineArea.shape[0], 3):
                 for col in range(1, machineArea.shape[1], 3):
 
-                    # Adding values to array
+                    # Adding values to array by iterating over layout (list index value)
                     try:
                         machineArea[row, col] = layout[idx]
                         idx = idx + 1
@@ -77,9 +77,7 @@ class Layout:
 
         return possibleLayouts
 
-
-
-    def find_new_machine(self, currentUserMachine: float, fieldOfView: int):
+    def find_new_machine(self, fieldOfView: int):
         """
         Req:
         1. current layout
@@ -88,7 +86,6 @@ class Layout:
         4. field of view - find all machines
         5. get queue length of all machines from 4
 
-        :param currentUserMachine:
         :param fieldOfView:
         :return:
         """
@@ -96,7 +93,29 @@ class Layout:
         # Checks current machine of user
         # Finds machine in field of view
         # Returns all machine numbers in field of view
-        pass
+
+        possibleLayouts = self.create_layouts()
+
+        for layout in possibleLayouts:
+            # call function - If user wait time is over OR workout is complete - find new machine
+            #currentUserMachine = function call
+            currentUserMachine = None
+
+            # Get array index position of current machine
+            currentMachinePosition = np.where(layout == currentUserMachine)
+
+            # Iterating over numpy array
+            for row in range(layout.shape[0]):
+
+                for col in range(layout.shape[1]):
+
+                    # Index array from current machine
+                    if row == currentMachinePosition[0] and col == currentMachinePosition[1]:
+                        print(layout[row - 3: row + 4, col - 3: col + 4])
+
+
+        # If user wait time is over OR workout is complete - find new machine
+
 
     def get(self):
         pass
