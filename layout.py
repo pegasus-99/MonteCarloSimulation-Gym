@@ -17,22 +17,40 @@ class Layout:
         :return: number of rows:int, number of columns:int, nested list containing unique machine numbers
         """
 
-        # Keeping number of rows fixed = 2, columns vary depending on total number of Machines
-        if self.totalMachines % 2 == 0:
-            row1 = int(self.totalMachines/2)
-            row2 = int(self.totalMachines - row1)
-        else:
-            row1 = int((self.totalMachines+1)/2)
-            row2 = int(self.totalMachines - row1)
+        # totalMachines = 13
+        # totalFloors = 2
+        # for floor in range(totalFloors):
+        #     machine = round(totalMachines / totalFloors)
+        #     if machine % 2 == 0:
+        #         row1 = int(machine / 2)
+        #         row2 = int(machine - row1)
+        #     else:
+        #         row1 = int((machine + 1) / 2)
+        #         row2 = int(machine - row1)
+        #
+        #     totalFloors -= 1
+        #     totalMachines = totalMachines - machine
+        #     print("Floor: {}, Machines: {}, Row1: {}, Row2: {}, Remaining Machines: {}".format(floor + 1, machine, row1,
+        #                                                                                        row2, totalMachines))
 
-        layoutRows = 6
-        layoutCols = row1*3
 
-        # Create every possible layout depending on number of machines
-        machines = [i + 1 for i in range(self.totalMachines)]
-        layoutCombination = [list(machine) for machine in permutations(machines)]
+        if self.totalFloors == 1:
+            if self.totalMachines % 2 == 0:
+                row1 = int(self.totalMachines/2)
+                row2 = int(self.totalMachines - row1)
+            else:
+                row1 = int((self.totalMachines+1)/2)
+                row2 = int(self.totalMachines - row1)
 
-        return layoutRows, layoutCols, layoutCombination
+            # Keeping number of rows fixed = 2, columns vary depending on total number of Machines
+            layoutRows = 6
+            layoutCols = row1*3
+
+            # Create every possible layout depending on number of machines
+            machines = [i + 1 for i in range(self.totalMachines)]
+            layoutCombination = [list(machine) for machine in permutations(machines)]
+
+            return layoutRows, layoutCols, layoutCombination
 
 
     def create_layouts(self):
@@ -69,7 +87,7 @@ class Layout:
 
         return possibleLayouts
 
-    def find_new_machine(self, fieldOfView: int):
+    def find_new_machine(self, fieldOfView:int):
         """
         This functions does the following:
         1. Checks current machine of user
