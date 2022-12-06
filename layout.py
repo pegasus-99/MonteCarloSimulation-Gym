@@ -2,7 +2,7 @@ from itertools import permutations
 import numpy as np
 class Layout:
 
-    def __init__(self, totalFloors:int, totalMachines:int, machineNumber:float, machineType:str):
+    def __init__(self, totalFloors:int, totalMachines:int):
         """
         :param totalFloors:
         :param totalMachines:
@@ -11,15 +11,13 @@ class Layout:
         """
         #self.totalFloors = totalFloors
         self.totalMachines = totalMachines
-        #self.machineNumber = machineNumber
-        #self.machineType = machineType
 
     def create_machine_space(self):
+        """
+        :return: number of rows:int, number of columns:int, nested list containing unique machine numbers
+        """
 
-
-        # Row-wise layout
-        # Keeping number of rows fixed = 2, columns
-
+        # Keeping number of rows fixed = 2, columns vary depending on total number of Machines
         if self.totalMachines % 2 == 0:
             row1 = int(self.totalMachines/2)
             row2 = int(self.totalMachines - row1)
@@ -39,19 +37,14 @@ class Layout:
 
     def create_layouts(self):
         """
-        Function is called in - create_layout_combination
-        :param floorLayout:
-        :param rowCount:
-        :param colCount:
-        :return:
+        This function creates machine area space for all values in layoutCombination
+        :return: List containing multiple layouts (numpy arrays)
         """
 
         # Get machine rows and columns
         rows, cols, layoutCombination = self.create_machine_space(self)
 
-
         possibleLayouts = []
-
         for layout in layoutCombination:
 
             # Creating empty numpy array which is the machine space
@@ -64,7 +57,6 @@ class Layout:
             # Iterating over rows and columns of array
             for row in range(1, machineArea.shape[0], 3):
                 for col in range(1, machineArea.shape[1], 3):
-
                     # Adding values to array by iterating over layout (list index value)
                     try:
                         machineArea[row, col] = layout[idx]
@@ -79,43 +71,37 @@ class Layout:
 
     def find_new_machine(self, fieldOfView: int):
         """
-        Req:
-        1. current layout
-        2. current machine
-        3. current queue length
-        4. field of view - find all machines
-        5. get queue length of all machines from 4
-
-        :param fieldOfView:
-        :return:
+        This functions does the following:
+        1. Checks current machine of user
+        2. Finds all machines in field of view
+        :param fieldOfView: how far can a user see from current machine
+        :return: numpy array containing all nearby machine numbers
         """
 
-        # Checks current machine of user
-        # Finds machine in field of view
-        # Returns all machine numbers in field of view
-
+        # Calling function
         possibleLayouts = self.create_layouts()
 
         for layout in possibleLayouts:
             # call function - If user wait time is over OR workout is complete - find new machine
-            #currentUserMachine = function call
+            # currentUserMachine = function call
             currentUserMachine = None
 
             # Get array index position of current machine
             currentMachinePosition = np.where(layout == currentUserMachine)
 
-            # Iterating over numpy array
+            # Iterating over current layout (numpy array)
             for row in range(layout.shape[0]):
-
                 for col in range(layout.shape[1]):
-
                     # Index array from current machine
                     if row == currentMachinePosition[0] and col == currentMachinePosition[1]:
-                        print(layout[row - 3: row + 4, col - 3: col + 4])
+                        # Finding machines from current machine
+                        nearbyMachines = layout[row - fieldOfView: row + (fieldOfView+1),
+                                                col - fieldOfView: col + (fieldOfView+1)]
 
+                        # Get unique machines from layout
+                        nearbyMachines = nearbyMachines[~np.isnan(nearbyMachines)]
 
-        # If user wait time is over OR workout is complete - find new machine
-
+        return nearbyMachines
 
     def get(self):
         pass
