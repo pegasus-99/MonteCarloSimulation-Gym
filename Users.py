@@ -1,7 +1,11 @@
 import random
+
+
 class Users:
-    def __init__(self, userName: str, userType: str, userPatience: str,
-                 timeDelta: float, viewPower: int, userID: str, userDict: dict):
+    ironheadType = ['rigid', 'flexible']
+    ironheadPat = ['patient', 'impatient']
+
+    def __init__(self, userID: str):
         """
         This function initializes the required parameters of a user
         :param userName: first name of the user
@@ -12,13 +16,13 @@ class Users:
         :param userID: Unique ID assigned to each user
         :param userDict: initializes a dictionary of users
         """
-        self.userName = userName
-        self.userType = userType
-        self.userPatience = userPatience
-        self.timeDelta = timeDelta
-        self.viewPower = viewPower
         self.userID = userID
-        self.userDict = userDict
+        # self.userDict = userDict
+        self.userType = random.choice(Users.ironheadType)
+        self.userPatience = random.choice(Users.ironheadPat)
+        self.timeDelta = 0
+        self.viewPower = 6
+        self.currentMachine = None
 
     def get(self):
         """
