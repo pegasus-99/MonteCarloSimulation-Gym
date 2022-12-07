@@ -11,6 +11,7 @@ class Layout:
         """
         #self.totalFloors = totalFloors
         self.totalMachines = totalMachines
+        self.totalFloors = totalFloors
 
     def create_machine_space(self):
         """
@@ -19,6 +20,7 @@ class Layout:
 
         totalMachines = self.totalMachines
         totalFloors = self.totalFloors
+
         floorLayout = {}
         layoutCombination = {}
 
@@ -48,6 +50,7 @@ class Layout:
 
         for floor, machines in floorLayout.items():
 
+            # Create permutations of machines on each floor
             machineArrangement = [list(machineNum) for machineNum in permutations(machines)]
 
             if floor not in layoutCombination:
@@ -79,6 +82,8 @@ class Layout:
                     row1 = int((machinesOnFloor + 1) / 2)
                     row2 = int(machinesOnFloor - row1)
 
+                # Row cells will be fixed = 6
+                # Col cells will vary depending on no. of machines in rows
                 layoutRows = 6
                 layoutCols = row1 * 3
 
