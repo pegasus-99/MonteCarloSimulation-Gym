@@ -17,75 +17,92 @@ class Layout:
         :return: number of rows:int, number of columns:int, nested list containing unique machine numbers
         """
 
-        # totalMachines = 13
-        # totalFloors = 2
-        # for floor in range(totalFloors):
-        #     machine = round(totalMachines / totalFloors)
-        #     if machine % 2 == 0:
-        #         row1 = int(machine / 2)
-        #         row2 = int(machine - row1)
-        #     else:
-        #         row1 = int((machine + 1) / 2)
-        #         row2 = int(machine - row1)
-        #
-        #     totalFloors -= 1
-        #     totalMachines = totalMachines - machine
-        #     print("Floor: {}, Machines: {}, Row1: {}, Row2: {}, Remaining Machines: {}".format(floor + 1, machine, row1,
-        #                                                                                        row2, totalMachines))
+        totalMachines = self.totalMachines
+        totalFloors = self.totalFloors
+        floorLayout = {}
+        layoutCombination = {}
 
+        for floor in range(totalFloors):
+            machinesOnFloor = round(totalMachines / totalFloors)
 
-        if self.totalFloors == 1:
-            if self.totalMachines % 2 == 0:
-                row1 = int(self.totalMachines/2)
-                row2 = int(self.totalMachines - row1)
-            else:
-                row1 = int((self.totalMachines+1)/2)
-                row2 = int(self.totalMachines - row1)
+            # Dictionary where key = floor number, val = list containing machine numbers
+            if floor + 1 not in floorLayout:
+                floorLayout[floor + 1] = []
 
-            # Keeping number of rows fixed = 2, columns vary depending on total number of Machines
-            layoutRows = 6
-            layoutCols = row1*3
+            # Get total number of machines in previous floor
+            try:
+                lastMachine = floorLayout[floor][-1]
+            except:
+                pass
 
-            # Create every possible layout depending on number of machines
-            machines = [i + 1 for i in range(self.totalMachines)]
-            layoutCombination = [list(machine) for machine in permutations(machines)]
+            for mach in range(totalMachines):
+                if mach + 1 <= machinesOnFloor:
+                    # Add list of machines to dictionary
+                    if floor + 1 == 1:
+                        floorLayout[floor + 1].append(mach + 1)
+                    else:
+                        floorLayout[floor + 1].append(lastMachine + mach + 1)
 
-            return layoutRows, layoutCols, layoutCombination
+            totalMachines = totalMachines - machinesOnFloor
+            totalFloors -= 1
 
+        for floor, machines in floorLayout.items():
+
+            machineArrangement = [list(machineNum) for machineNum in permutations(machines)]
+
+            if floor not in layoutCombination:
+                layoutCombination[floor] = machineArrangement
+                # layoutCombination[floor].append(machineArrangement)
+
+        return layoutCombination
 
     def create_layouts(self):
         """
         This function creates machine area space for all values in layoutCombination
-        :return: List containing multiple layouts (numpy arrays)
+        :return: Dict containing floor numbers as keys, multiple layouts as values (numpy arrays)
         """
 
-        # Get machine rows and columns
-        rows, cols, layoutCombination = self.create_machine_space(self)
+        # Get floor layout
+        layoutCombination = self.create_machine_space(self)
 
-        possibleLayouts = []
-        for layout in layoutCombination:
+        allLayouts = {}
+        for floor, machineCombo in layoutCombination.items():
 
-            # Creating empty numpy array which is the machine space
-            machineArea = np.empty((rows, cols,))
-            machineArea[:] = np.nan
+            for machines in machineCombo:
+                machinesOnFloor = len(machines)
 
-            # Initializing index value = 0
-            idx = 0
+                # Divide machines on floor into two rows
+                if machinesOnFloor % 2 == 0:
+                    row1 = int(machinesOnFloor / 2)
+                    row2 = int(machinesOnFloor - row1)
+                else:
+                    row1 = int((machinesOnFloor + 1) / 2)
+                    row2 = int(machinesOnFloor - row1)
 
-            # Iterating over rows and columns of array
-            for row in range(1, machineArea.shape[0], 3):
-                for col in range(1, machineArea.shape[1], 3):
-                    # Adding values to array by iterating over layout (list index value)
-                    try:
-                        machineArea[row, col] = layout[idx]
-                        idx = idx + 1
-                    except IndexError:
-                        pass
+                layoutRows = 6
+                layoutCols = row1 * 3
 
-            # Adding all possible combination of machineArea to list
-            possibleLayouts.append(machineArea)
+                # Creating empty machine space
+                machineArea = np.empty((layoutRows, layoutCols,))
+                machineArea[:] = np.nan
 
-        return possibleLayouts
+                index = 0
+                # Iterating over rows and columns of array
+                for row in range(1, machineArea.shape[0], 3):
+                    for col in range(1, machineArea.shape[1], 3):
+                        # Adding values to array by iterating over layout (list index value)
+                        try:
+                            machineArea[row, col] = machines[index]
+                            index += 1
+                        except IndexError:
+                            pass
+
+                if floor not in allLayouts:
+                    allLayouts[floor] = []
+
+                allLayouts[floor].append(machineArea)
+
+        return allLayouts
 
     def find_new_machine(self, fieldOfView:int):
         """
