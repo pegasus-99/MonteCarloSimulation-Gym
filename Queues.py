@@ -1,25 +1,28 @@
 # for staging area, import Layout
 import time
+import Users
+import machine
 
 
-def make_queue(machine: object):
+def make_queue():
     # initialize queue for the machine
-    machine.queue = [None] * 5
-    return machine
+    initialQueue = [None] * 5
+    return initialQueue
 
 
-def add_user_to_queue(user: object, machine: object):
+def add_user_to_queue(currentUser: object, currentMachine: object):
     # initialize user to the machine queue
     # update User object with current_queue
     # update machine object with user
 
     # make the user scan here for a new machine with a smaller queue -- Layout.find_new_machine()
-    if None not in machine.queue:
+    if None not in currentMachine.queue:
         return False
     # updating machine queue
-    machine.queue.append(user)
+    currentMachine.queue.append(currentUser)
     # updating users' current queue
-    setattr(user, "current_queue", machine.queue)
+    currentUser.currentMachine = currentMachine
+    # setattr(user, "current_queue", machine.queue)
     return True
 
 
@@ -36,12 +39,13 @@ def check_queue(machineList: object):
                     pass
 
 
-def remove_from_queue(machine: object, user: object):
+def remove_from_queue(currentMachine: object, currentUser: object):
     try:
-        machine.queue.remove(user)
+        currentMachine.queue.remove(currentUser)
         return True
     except Exception as e:
         return False
+
 
 if __name__ == '__main__':
     pass
