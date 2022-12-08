@@ -8,13 +8,7 @@ class Users:
     def __init__(self, userID: str):
         """
         This function initializes the required parameters of a user
-        :param userName: first name of the user
-        :param userType: rigid or flexible
-        :param userPatience: patient or impatient
-        :param timeDelta: time spent by user in the gym
-        :param viewPower: the field of view of each user
         :param userID: Unique ID assigned to each user
-        :param userDict: initializes a dictionary of users
         """
         self.userID = userID
         # self.userDict = userDict
@@ -29,8 +23,9 @@ class Users:
         This method gets information about the user
         :return: current user's dictionary
         """
-        self.userDict[self.userID] = [self.userName, self.userType, self.userPatience, self.viewPower, self.timeDelta]
-        return self.userDict
+        # self.userDict[self.userID] = [self.userName, self.userType, self.userPatience, self.viewPower, self.timeDelta]
+        # return self.userDict
+        pass
 
     def set(self, elapsedTime: float):
         """

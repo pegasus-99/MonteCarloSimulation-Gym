@@ -2,8 +2,9 @@ import layout
 import machine
 import Users
 import Queues
+import random
 
-totalMachines = 10
+# totalMachines = 10
 allUsers = []
 allLayouts = None
 
@@ -13,7 +14,13 @@ def create_machines():
     # 1. Total machines
     # 2. User input - count of each machine type
     # 3.
-    pass
+    machineList = []
+    totalMachines = int(input("Enter total number of machines"))
+    typeMachine = ["Back", "Front Upper", "Legs", "Cardiovascular"]
+    for i in range(totalMachines):
+        x = [random.choice(typeMachine)]
+        machineList.append(x)
+    return machineList
 
 
 def create_users(count_users):
