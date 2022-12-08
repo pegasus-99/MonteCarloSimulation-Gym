@@ -2,6 +2,51 @@ from itertools import permutations
 import numpy as np
 
 
+def find_new_machine(fieldOfView: int, layout: np.ndarray, currentUserMachine: object):
+    """
+    :param fieldOfView:
+    :param layout:
+    :param currentUserMachine:
+    :return:
+    """
+
+    currentMachinePosition = np.where(layout == currentUserMachine.machineID)
+
+    nearbyMachines = []
+
+    # Checking if machine is present on current floor
+    if len(currentMachinePosition[0]) != 0:
+
+        # Checking nearby cells in array for new machine(-3 to +3)
+        for row in range(int(currentMachinePosition[0]) - fieldOfView,
+                         int(currentMachinePosition[0]) + fieldOfView + 1):
+            for col in range(int(currentMachinePosition[1]) - fieldOfView,
+                             int(currentMachinePosition[1]) + fieldOfView + 1):
+
+                # Index array from current machine
+                try:
+                    if row >= 0 and col >= 0 and not np.isnan(layout[row][col]) \
+                            and layout[row][col] != currentUserMachine.machineID:
+
+                        machine = layout[row][col]
+
+                        # Call function to get machine queue length
+                        # Add to dictionary as {mach: queueLength}
+                        # Return machine with least queueLength
+                        nearbyMachines.append(machine)
+
+                except IndexError:
+                    pass
+
+        # Call best machine = queue.findBestMachine(nearbyMachines)
+        # If not Call best machine , find new machine call with field of view = layout shape/2
+        return nearbyMachines
+
+    # If machine not in current floor
+    else:
+        print("Machine not on this floor")
+
+
 class Layout:
 
     def __init__(self, totalFloors: int, totalMachines: int):
@@ -37,13 +82,18 @@ class Layout:
             except KeyError:
                 pass
 
+            # Loop over data structure given from Bum
+            # [[machineID = mach+1, 10, ], [m2], [m3]]
             for mach in range(totalMachines):
                 if mach + 1 <= machinesOnFloor:
+                    # currentMachine = machine.Machine(machineID = mach+1, useTime= , )
+
                     # Add list of machines to dictionary
                     if floor + 1 == 1:
                         floorLayout[floor + 1].append(mach + 1)
                     else:
-                        floorLayout[floor + 1].append(lastMachine + mach + 1)
+                        floorLayout[floor + 1].append(lastMachine + (mach + 1))
+                        # floorLayout[floor + 1].append(lastMachine.MachineID + (mach+1))
 
             totalMachines = totalMachines - machinesOnFloor
             totalFloors -= 1
@@ -108,56 +158,6 @@ class Layout:
                 allLayouts[floor].append(machineArea)
 
         return allLayouts
-
-    def find_new_machine(self, fieldOfView: int):
-        """
-        This functions does the following:
-        1. Checks current machine of user
-        2. Finds all machines in field of view
-        :param fieldOfView: how far can a user see from current machine
-        :return: numpy array containing all nearby machine numbers
-        """
-
-        # Calling function
-        allLayouts = self.create_layouts()
-
-        for layout in allLayouts:
-            # call function - If user wait time is over OR workout is complete - find new machine
-            # currentUserMachine = function call
-            currentUserMachine = None
-            currentMachinePosition = np.where(layout == currentUserMachine)
-
-            nearbyMachines = []
-
-            # Checking if machine is present on current floor
-            if len(currentMachinePosition[0]) != 0:
-
-                # Checking nearby cells in array for new machine(-3 to +3)
-                for row in range(int(currentMachinePosition[0]) - fieldOfView,
-                                 int(currentMachinePosition[0]) + fieldOfView + 1):
-                    for col in range(int(currentMachinePosition[1]) - fieldOfView,
-                                     int(currentMachinePosition[1]) + fieldOfView + 1):
-
-                        # Index array from current machine
-                        try:
-                            if row >= 0 and col >= 0 and not np.isnan(layout[row][col]) \
-                                    and layout[row][col] != currentUserMachine:
-
-                                machine = layout[row][col]
-
-                                # Call function to get machine queue length
-                                # Add to dictionary as {mach: queueLength}
-                                # Return machine with least queueLength
-                                nearbyMachines.append(machine)
-
-                        except IndexError:
-                            pass
-
-                return nearbyMachines
-
-            # If machine not in current floor
-            else:
-                print("Machine not on this floor")
 
     def get(self):
         pass
