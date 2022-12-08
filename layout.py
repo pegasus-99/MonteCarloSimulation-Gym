@@ -128,23 +128,34 @@ class Layout:
             currentMachinePosition = np.where(layout == currentUserMachine)
 
             nearbyMachines = []
+
+            # Checking if machine is present on current floor
             if len(currentMachinePosition[0]) != 0:
+
+                # Checking nearby cells in array for new machine(-3 to +3)
                 for row in range(int(currentMachinePosition[0]) - fieldOfView,
                                  int(currentMachinePosition[0]) + fieldOfView + 1):
                     for col in range(int(currentMachinePosition[1]) - fieldOfView,
                                      int(currentMachinePosition[1]) + fieldOfView + 1):
+
                         # Index array from current machine
                         try:
                             if row >= 0 and col >= 0 and not np.isnan(layout[row][col]) \
                                     and layout[row][col] != currentUserMachine:
 
                                 machine = layout[row][col]
+
+                                # Call function to get machine queue length
+                                # Add to dictionary as {mach: queueLength}
+                                # Return machine with least queueLength
                                 nearbyMachines.append(machine)
 
                         except IndexError:
                             pass
 
                 return nearbyMachines
+
+            # If machine not in current floor
             else:
                 print("Machine not on this floor")
 
