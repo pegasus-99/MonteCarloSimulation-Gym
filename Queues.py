@@ -47,5 +47,9 @@ def remove_from_queue(currentMachine: object, currentUser: object):
         return False
 
 
+def get_best_machine():
+    pass
+
+
 if __name__ == '__main__':
     pass

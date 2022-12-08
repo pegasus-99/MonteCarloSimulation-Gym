@@ -40,6 +40,7 @@ def print_output():
 
 if __name__ == "__main__":
     global allLayouts
+    # Layout = layout.Layout(allMachines, allFloors)
     allLayouts = layout.Layout.create_layouts()
     create_users()
     create_machines()
