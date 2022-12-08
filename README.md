@@ -1,3 +1,4 @@
-# 2022Fall_projects
+# Monte Carlo Simulation of a Gym
 
-VIEW CODE in "Stage" branch
+All code is currently pushed to the "Stage" branch. 
+To view the code, please visit this link: https://github.com/ShubhamJain2798/MonteCarloSimulation-Gym/tree/stage
