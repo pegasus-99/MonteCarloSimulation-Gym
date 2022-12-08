@@ -9,6 +9,10 @@ allLayouts = None
 
 
 def create_machines():
+    # Parameters:
+    # 1. Total machines
+    # 2. User input - count of each machine type
+    # 3.
     pass
 
 
