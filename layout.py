@@ -1,15 +1,15 @@
 from itertools import permutations
 import numpy as np
+
+
 class Layout:
 
-    def __init__(self, totalFloors:int, totalMachines:int):
+    def __init__(self, totalFloors: int, totalMachines: int):
         """
         :param totalFloors:
         :param totalMachines:
-        :param machineNumber:
-        :param machineType:
         """
-        #self.totalFloors = totalFloors
+        # self.totalFloors = totalFloors
         self.totalMachines = totalMachines
         self.totalFloors = totalFloors
 
@@ -34,7 +34,7 @@ class Layout:
             # Get total number of machines in previous floor
             try:
                 lastMachine = floorLayout[floor][-1]
-            except:
+            except KeyError:
                 pass
 
             for mach in range(totalMachines):
@@ -109,7 +109,7 @@ class Layout:
 
         return allLayouts
 
-    def find_new_machine(self, fieldOfView:int):
+    def find_new_machine(self, fieldOfView: int):
         """
         This functions does the following:
         1. Checks current machine of user
@@ -119,29 +119,34 @@ class Layout:
         """
 
         # Calling function
-        possibleLayouts = self.create_layouts()
+        allLayouts = self.create_layouts()
 
-        for layout in possibleLayouts:
+        for layout in allLayouts:
             # call function - If user wait time is over OR workout is complete - find new machine
             # currentUserMachine = function call
             currentUserMachine = None
-
-            # Get array index position of current machine
             currentMachinePosition = np.where(layout == currentUserMachine)
 
-            # Iterating over current layout (numpy array)
-            for row in range(layout.shape[0]):
-                for col in range(layout.shape[1]):
-                    # Index array from current machine
-                    if row == currentMachinePosition[0] and col == currentMachinePosition[1]:
-                        # Finding machines from current machine
-                        nearbyMachines = layout[row - fieldOfView: row + (fieldOfView+1),
-                                                col - fieldOfView: col + (fieldOfView+1)]
+            nearbyMachines = []
+            if len(currentMachinePosition[0]) != 0:
+                for row in range(int(currentMachinePosition[0]) - fieldOfView,
+                                 int(currentMachinePosition[0]) + fieldOfView + 1):
+                    for col in range(int(currentMachinePosition[1]) - fieldOfView,
+                                     int(currentMachinePosition[1]) + fieldOfView + 1):
+                        # Index array from current machine
+                        try:
+                            if row >= 0 and col >= 0 and not np.isnan(layout[row][col]) \
+                                    and layout[row][col] != currentUserMachine:
 
-                        # Get unique machines from layout
-                        nearbyMachines = nearbyMachines[~np.isnan(nearbyMachines)]
+                                machine = layout[row][col]
+                                nearbyMachines.append(machine)
 
-        return nearbyMachines
+                        except IndexError:
+                            pass
+
+                return nearbyMachines
+            else:
+                print("Machine not on this floor")
 
     def get(self):
         pass
