@@ -37,6 +37,11 @@ def gym_simulation():
         for user in allUsers:
             machineFound = layout.Layout.find_new_machine(user, layout)
 
+    # after adding all users to te gym:
+    # thread1: check for impatient users -- run Queues.check_queue()
+    # thread2: update machines: run Machine.check_machine()
+    # thread3: print_output from main
+
 
 def print_output():
     print("There are currently "+""+"users in the gym"+""+"out of which x are using the machines, z are in queue and y "
