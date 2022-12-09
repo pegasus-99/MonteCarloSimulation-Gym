@@ -50,8 +50,8 @@ class Users:
         self.userPatience = random.choice(ironheadPat)
         self.timeDelta = 0
         self.viewPower = 6
-        self.userDict = {}
-        return self.userType, self.userPatience, self.timeDelta, self.viewPower, self.userDict
+        # self.userDict = {}
+        return self.userType, self.userPatience, self.timeDelta, self.viewPower
 
 
 if __name__ == "__main__":
