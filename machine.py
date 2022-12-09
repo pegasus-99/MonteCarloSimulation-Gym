@@ -1,4 +1,6 @@
 import Queues
+import layout
+import time
 
 
 class Machine:
@@ -7,6 +9,7 @@ class Machine:
         self.useTime = useTime
         self.peopleCount = peopleCount
         self.machineType = machineType
+        self.machineUseStartTime = None
         self.queue = Queues.make_queue()
         """
         current_queue: [user1, user2....] --> object queue
@@ -20,3 +23,13 @@ class Machine:
 
     # def user_machine(self, user):
     # user.elapsed_time += 5
+
+
+def check_machine(currentLayout, machines):
+    # temp = []
+    for machine in machines:
+        if machine.machineUseStartTime - time.time() >= 10:
+            machine.machineUseStartTime = time.time()
+            exitUser = machine.queue.pop(0)
+            newMachine = layout.find_new_machine(None, currentLayout,  machine)
+            Queues.add_user_to_queue(exitUser, newMachine)

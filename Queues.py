@@ -6,7 +6,7 @@ import machine
 
 def make_queue():
     # initialize queue for the machine
-    initialQueue = [None] * 5
+    initialQueue = [None] * 6
     return initialQueue
 
 
@@ -47,8 +47,20 @@ def remove_from_queue(currentMachine: object, currentUser: object):
         return False
 
 
-def get_best_machine():
-    pass
+def get_best_machine(machines, layout):
+    leastQueueMachine = None
+    noBest = False
+    for mach in machines:
+        if not leastQueueMachine:
+            leastQueueMachine = mach
+            noBest = True
+        elif len(mach.queue) < len(leastQueueMachine.queue):
+            leastQueueMachine = mach
+            noBest = False
+    if noBest:
+        pass #find machine in the whole floor
+    else:
+        return leastQueueMachine
 
 
 if __name__ == '__main__':

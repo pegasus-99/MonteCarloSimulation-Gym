@@ -6,6 +6,7 @@ import random
 
 # totalMachines = 10
 allUsers = []
+allMachines = []
 allLayouts = None
 
 
@@ -47,8 +48,23 @@ def print_output():
 
 if __name__ == "__main__":
     global allLayouts
+    global allMachines
     # Layout = layout.Layout(allMachines, allFloors)
-    allLayouts = layout.Layout.create_layouts()
+
+    createLayoutInput = []
+    workoutTypes = ['Back', "Front Upper Body", "Legs", "Cardio Vascular", "Arms"]
+    for type in workoutTypes:
+        correctAnswer = True
+        while correctAnswer:
+            try:
+                machCount = int(input("Enter the number of machines for "+type+" workout: "))
+                for x in range(machCount):
+                    createLayoutInput.append([type])
+                correctAnswer = False
+            except ValueError:
+                print("Please enter an integer for the number of machines, try again")
+
+    allLayouts, allMachines = layout.Layout.create_layouts(createLayoutInput)
     create_users()
-    create_machines()
+    # create_machines()
     pass
