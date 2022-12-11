@@ -65,7 +65,7 @@ def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, 
         # If not Call best machine , find new machine call with field of view = layout shape/2
         bestMachine = Queues.get_best_machine(nearbyMachines)
         if not bestMachine:
-            find_new_machine(currentUser, None, layout, currentUserMachine)
+            find_new_machine(currentUser, fieldOfView, layout, currentUserMachine)
         else:
             return nearbyMachines
 

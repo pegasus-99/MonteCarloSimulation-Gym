@@ -26,6 +26,11 @@ class Machine:
 
 
 def check_machine(currentLayout, machines):
+    """
+    :param currentLayout:
+    :param machines:
+    :return:
+    """
     # temp = []
     time.sleep(5)
     for machine in machines:

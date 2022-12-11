@@ -5,15 +5,23 @@ import machine
 
 
 def make_queue():
-    # initialize queue for the machine
+    """
+    initialize queue for the machine
+    :return: initial queue of none
+    """
     initialQueue = [None] * 6
     return initialQueue
 
 
 def add_user_to_queue(currentUser: object, currentMachine: object):
+    """
     # initialize user to the machine queue
     # update User object with current_queue
     # update machine object with user
+    :param currentUser: current user
+    :param currentMachine: the machine user is currently wanting to use
+    :return: Boolean value indicating user has been added to the queue
+    """
 
     # make the user scan here for a new machine with a smaller queue -- Layout.find_new_machine()
     if None not in currentMachine.queue:
@@ -28,6 +36,11 @@ def add_user_to_queue(currentUser: object, currentMachine: object):
 
 
 def check_queue(machineList: object):
+    """
+
+    :param machineList: list of machines
+    :return:
+    """
     # run this piece of code in a thread
     # check for impatient user
     # check if machine is empty
@@ -42,6 +55,11 @@ def check_queue(machineList: object):
 
 
 def remove_from_queue(currentMachine: object, currentUser: object):
+    """
+    :param currentMachine:
+    :param currentUser:
+    :return:
+    """
     try:
         currentMachine.queue.remove(currentUser)
         return True
@@ -50,6 +68,10 @@ def remove_from_queue(currentMachine: object, currentUser: object):
 
 
 def get_best_machine(machines):
+    """
+    :param machines:
+    :return:
+    """
     leastQueueMachine = None
     noBest = False
     for mach in machines:

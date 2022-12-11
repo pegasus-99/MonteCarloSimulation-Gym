@@ -27,11 +27,32 @@ class Users:
 
     @staticmethod
     def get_workout_day(possible_choices, dayToExclude):
+        """
+
+        :param possible_choices:
+        :param dayToExclude:
+        :return:
+        >>> pc = ['Back', 'Legs', 'Cardio']
+        ... dte = None
+        ... a,b = get_workout_day(pc, dte)
+        ... print(a,b)
+
+        """
         possible_choices = [v for v in possible_choices if v != dayToExclude]
         return random.choice(possible_choices), possible_choices
 
     @staticmethod
     def get_workout_machines(machines, workOutDay):
+        """
+
+        :param machines:
+        :param workOutDay:
+        :return:
+        >>> mc = ['Back', 'Legs', 'Cardio']
+        ... day = "Legs"
+        ... print(get_workout_machines(mc, day))
+
+        """
         temp = []
         for machine in machines:
             if machine.machineType == workOutDay:
