@@ -3,14 +3,16 @@ import numpy as np
 import machine
 
 
-def find_new_machine(fieldOfView: int, layout: np.ndarray, currentUserMachine: object):
+def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, currentUserMachine: object):
     """
+    :param currentUser:
     :param fieldOfView:
     :param layout:
     :param currentUserMachine:
     :return:
     """
-
+    if not fieldOfView:
+        maxShape = max(layout.shape[0], layout.shape[1])
     # Find index position of current machine ID in layout
     currentMachinePosition = np.where(layout == currentUserMachine.machineID)
 
@@ -61,7 +63,7 @@ class Layout:
         # self.totalMachines = totalMachines
         self.totalFloors = totalFloors
 
-    def create_machine_space(self, allMachines: object):
+    def create_machine_space(self, allMachines: list):
         """
         :return: number of rows:int, number of columns:int, nested list containing unique machine numbers
         """
@@ -86,19 +88,26 @@ class Layout:
             try:
                 lastMachine = floorLayout[floor][-1].machineID
             except KeyError:
-                pass
+                lastMachine = -1
 
             # Loop over data structure given from Bum
             # allMachines = [[machineID = mach+1, 10, ], [m2], [m3]]
             # for mach in range(totalMachines):
+            machineID = 0
+            machineObjects = []
+            machineID = 0
             for mach in allMachines:
-                if mach.machineID <= machinesOnFloor:
+                machineID += 1
+                tempMachine = machine.Machine(machineID=machineID, useTime=mach[2], peopleCount=mach[1],
+                                              machineType=mach[0])
+                machineObjects.append(tempMachine)
+                if tempMachine.machineID <= machinesOnFloor:
                     # currentMachine = machine.Machine(machineID = mach+1, useTime= , )
 
                     # Add list of machines to dictionary
                     if floor + 1 == 1:
                         # floorLayout[floor + 1].append(mach + 1)
-                        floorLayout[floor + 1].append(mach)
+                        floorLayout[floor + 1].append(tempMachine)
                     else:
                         # floorLayout[floor + 1].append(lastMachine + (mach + 1))
                         if mach.machineID > lastMachine:
@@ -110,12 +119,12 @@ class Layout:
         for floor, machines in floorLayout.items():
 
             # Create permutations of machines on each floor
-            machineArrangement = [list(machineNum) for machineNum in permutations(machines)]
+            machineArrangement = [list(machineObj) for machineObj in permutations(machines)]
 
             if floor not in layoutCombination:
                 layoutCombination[floor] = machineArrangement
 
-        return layoutCombination
+        return layoutCombination, machineObjects
 
     def create_layouts(self):
         """
@@ -124,7 +133,7 @@ class Layout:
         """
 
         # Get floor layout
-        layoutCombination = self.create_machine_space(self)
+        layoutCombination, machineObjects = self.create_machine_space()
 
         allLayouts = {}
         for floor, machineCombo in layoutCombination.items():
@@ -155,7 +164,7 @@ class Layout:
                     for col in range(1, machineArea.shape[1], 3):
                         # Adding values to array by iterating over layout (list index value)
                         try:
-                            machineArea[row, col] = machines[index].machineID
+                            machineArea[row, col] = machines[index]
                             index += 1
                         except IndexError:
                             pass
@@ -165,7 +174,7 @@ class Layout:
 
                 allLayouts[floor].append(machineArea)
 
-        return allLayouts
+        return allLayouts, machineObjects
 
     def get(self):
         pass

@@ -5,18 +5,49 @@ class Users:
     ironheadType = ['rigid', 'flexible']
     ironheadPat = ['patient', 'impatient']
 
-    def __init__(self, userID: str):
+    def __init__(self, userID: str, machines: list):
         """
         This function initializes the required parameters of a user
         :param userID: Unique ID assigned to each user
         """
+        workoutTypes = ['Back', "Front Upper Body", "Legs", "Cardio Vascular", "Arms"]
         self.userID = userID
         # self.userDict = userDict
         self.userType = random.choice(Users.ironheadType)
+        self.workoutMachines = None
+        if self.userType == 'rigid':
+            workoutDay, workoutTypes = self.get_workout_day(workoutTypes, None)
+            self.workoutMachines = self.get_workout_machines(machines, workoutDay)
+            while True:
+                if len(machines) < 5:
+                    break
+                if len(self.workoutMachines) < 5:
+                    workoutDay = self.get_workout_day(workoutTypes, workoutDay)
+                    self.workoutMachines.extend(self.get_workout_machines(machines, workoutDay))
+                else:
+                    break
+
+            # for machine in machines:
+            #     if machine.machineType == self.workoutDayPrimary:
+            #         self.workoutMachines.append(machine)
+            # if len(self.workoutMachines):
         self.userPatience = random.choice(Users.ironheadPat)
         self.timeDelta = 0
         self.viewPower = 6
         self.currentMachine = None
+
+    def get_workout_day(self, possible_choices, dayToExclude):
+        possible_choices = [v for v in possible_choices if v != dayToExclude]
+        return random.choice(possible_choices), possible_choices
+
+
+    def get_workout_machines(self, machines, workOutDay):
+        temp = []
+        for machine in machines:
+            if machine.machineType == workOutDay:
+                temp.append(machine)
+        return temp
+
 
     def get(self):
         """
@@ -55,4 +86,4 @@ class Users:
 
 
 if __name__ == "__main__":
-    pass
+    passc
