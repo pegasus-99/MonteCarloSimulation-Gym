@@ -10,18 +10,18 @@ allMachines = []
 allLayouts = None
 
 
-def create_machines():
-    # Parameters:
-    # 1. Total machines
-    # 2. User input - count of each machine type
-    # 3.
-    machineList = []
-    totalMachines = int(input("Enter total number of machines"))
-    typeMachine = ["Back", "Front Upper", "Legs", "Cardiovascular"]
-    for i in range(totalMachines):
-        x = [random.choice(typeMachine)]
-        machineList.append(x)
-    return machineList
+# def create_machines():
+#     # Parameters:
+#     # 1. Total machines
+#     # 2. User input - count of each machine type
+#     # 3.
+#     machineList = []
+#     totalMachines = int(input("Enter total number of machines"))
+#     typeMachine = ["Back", "Front Upper", "Legs", "Cardiovascular"]
+#     for i in range(totalMachines):
+#         x = [random.choice(typeMachine)]
+#         machineList.append(x)
+#     return machineList
 
 
 def create_users(count_users):
@@ -71,6 +71,14 @@ if __name__ == "__main__":
                 print("Please enter an integer for the number of machines, try again")
 
     allLayouts, allMachines = layout.Layout.create_layouts(createLayoutInput)
-    create_users()
+
+    while True:
+        try:
+            userCount = int(input("Enter the number of users you expect in the gym: "))
+            break
+        except ValueError:
+            print("Please enter an integer value")
+
+    create_users(userCount)
     # create_machines()
     pass
