@@ -6,6 +6,8 @@ import Users
 import Queues
 import random
 import threading
+import sys
+sys.setrecursionlimit(5000)
 
 # totalMachines = 10
 allUsers = []

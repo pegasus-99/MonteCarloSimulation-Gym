@@ -3,7 +3,8 @@ import time
 import Users
 import machine
 
-
+import sys
+sys.setrecursionlimit(5000)
 def make_queue():
     """
     initialize queue for the machine

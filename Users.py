@@ -1,5 +1,6 @@
 import random
-
+import sys
+sys.setrecursionlimit(5000)
 
 class Users:
     ironheadType = ['rigid', 'flexible']

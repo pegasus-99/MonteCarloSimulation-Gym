@@ -5,6 +5,8 @@ import Queues
 import machine
 import random
 import copy
+import sys
+sys.setrecursionlimit(5000)
 
 def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, currentUserMachine: object):
     """
@@ -66,6 +68,7 @@ def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, 
         bestMachine = Queues.get_best_machine(nearbyMachines)
         if not bestMachine:
             find_new_machine(currentUser, fieldOfView, layout, currentUserMachine)
+            # If best machine is not found then go the nearby machine.
         else:
             return nearbyMachines
 
