@@ -15,7 +15,10 @@ class Users:
         # self.userDict = userDict
         self.userType = random.choice(Users.ironheadType)
         self.workoutMachines = None
-        if self.userType == 'rigid':
+
+        if self.userType == 'flexible':
+            self.workoutMachines = machines
+        elif self.userType == 'rigid':
             workoutDay, workoutTypes = self.get_workout_day(workoutTypes, None)
             self.workoutMachines = self.get_workout_machines(machines, workoutDay)
             while True:
@@ -27,27 +30,24 @@ class Users:
                 else:
                     break
 
-            # for machine in machines:
-            #     if machine.machineType == self.workoutDayPrimary:
-            #         self.workoutMachines.append(machine)
-            # if len(self.workoutMachines):
         self.userPatience = random.choice(Users.ironheadPat)
         self.timeDelta = 0
         self.viewPower = 6
         self.currentMachine = None
+        self.currentQueueTime = None
 
-    def get_workout_day(self, possible_choices, dayToExclude):
+    @staticmethod
+    def get_workout_day(possible_choices, dayToExclude):
         possible_choices = [v for v in possible_choices if v != dayToExclude]
         return random.choice(possible_choices), possible_choices
 
-
-    def get_workout_machines(self, machines, workOutDay):
+    @staticmethod
+    def get_workout_machines(machines, workOutDay):
         temp = []
         for machine in machines:
             if machine.machineType == workOutDay:
                 temp.append(machine)
         return temp
-
 
     def get(self):
         """

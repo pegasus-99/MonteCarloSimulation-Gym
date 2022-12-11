@@ -22,6 +22,7 @@ def add_user_to_queue(currentUser: object, currentMachine: object):
     currentMachine.queue.append(currentUser)
     # updating users' current queue
     currentUser.currentMachine = currentMachine
+    currentUser.currentQueueTime = time.time()
     # setattr(user, "current_queue", machine.queue)
     return True
 
@@ -32,9 +33,9 @@ def check_queue(machineList: object):
     # check if machine is empty
     time.sleep(5)
     for machine in machineList:
-        for user in machine:
+        for user in machine.queue:
             if user.impatience:
-                if user.currentQueueTime > user.impatientTime or user.currentQueueTime > user.thresholdTime:
+                if user.currentQueueTime > user.impatientTime:
                     # find new machine using Layout --->  Layout.find_new_machine(user, user.currentMachine)
                     pass
 
@@ -47,7 +48,7 @@ def remove_from_queue(currentMachine: object, currentUser: object):
         return False
 
 
-def get_best_machine(machines, layout):
+def get_best_machine(machines):
     leastQueueMachine = None
     noBest = False
     for mach in machines:
@@ -58,7 +59,7 @@ def get_best_machine(machines, layout):
             leastQueueMachine = mach
             noBest = False
     if noBest:
-        pass #find machine in the whole floor
+        return None
     else:
         return leastQueueMachine
 

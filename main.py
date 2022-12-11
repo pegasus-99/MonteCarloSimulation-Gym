@@ -36,6 +36,7 @@ def gym_simulation():
     for layout in allLayouts:
         for user in allUsers:
             machineFound = layout.Layout.find_new_machine(user, layout)
+            Queues.add_user_to_queue(user, machineFound)
 
     # after adding all users to te gym:
     # thread1: check for impatient users -- run Queues.check_queue()

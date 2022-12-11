@@ -1,5 +1,7 @@
 from itertools import permutations
 import numpy as np
+
+import Queues
 import machine
 
 
@@ -11,8 +13,10 @@ def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, 
     :param currentUserMachine:
     :return:
     """
+    # search the whole gym instead of field of view
     if not fieldOfView:
         maxShape = max(layout.shape[0], layout.shape[1])
+        fieldOfView = int(maxShape/2+1)
     # Find index position of current machine ID in layout
     currentMachinePosition = np.where(layout == currentUserMachine.machineID)
 
@@ -32,19 +36,25 @@ def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, 
                     if row >= 0 and col >= 0 and not np.isnan(layout[row][col]) \
                             and layout[row][col] != currentUserMachine.machineID:
 
-                        machineNum = layout[row][col]
+                        possibleMachine = layout[row][col]
+
 
                         # Call function to get machine queue length
                         # Add to dictionary as {mach: queueLength}
                         # Return machine with least queueLength
-                        nearbyMachines.append(machineNum)
+                        if possibleMachine in currentUser.workoutMachines:
+                            nearbyMachines.append(possibleMachine)
 
                 except IndexError:
                     pass
 
         # Call best machine = queue.findBestMachine(nearbyMachines)
         # If not Call best machine , find new machine call with field of view = layout shape/2
-        return nearbyMachines
+        bestMachine = Queues.get_best_machine(nearbyMachines)
+        if not bestMachine:
+            find_new_machine(currentUser, None, layout, currentUserMachine)
+        else:
+            return nearbyMachines
 
     # If machine not in current floor
     else:
@@ -91,7 +101,7 @@ class Layout:
                 lastMachine = -1
 
             # Loop over data structure given from Bum
-            # allMachines = [[machineID = mach+1, 10, ], [m2], [m3]]
+            # allMachines = [[mach+1, 10, ], [m2], [m3]]
             # for mach in range(totalMachines):
             machineID = 0
             machineObjects = []
