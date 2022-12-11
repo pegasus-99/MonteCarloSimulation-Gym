@@ -27,9 +27,15 @@ class Machine:
 
 def check_machine(currentLayout, machines):
     # temp = []
+    time.sleep(5)
     for machine in machines:
         if machine.machineUseStartTime - time.time() >= 10:
             machine.machineUseStartTime = time.time()
             exitUser = machine.queue.pop(0)
-            newMachine = layout.find_new_machine(None, currentLayout,  machine)
-            Queues.add_user_to_queue(exitUser, newMachine)
+            #exitUser.elapsedTime+=10
+            exitUser.usedMachines += 1
+            if exitUser.usedMachines <= 5:
+                newMachine = layout.find_new_machine(exitUser, 5, currentLayout,  machine)
+                Queues.add_user_to_queue(exitUser, newMachine)
+            else:
+                pass

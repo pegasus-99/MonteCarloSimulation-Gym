@@ -31,7 +31,8 @@ def check_queue(machineList: object):
     # run this piece of code in a thread
     # check for impatient user
     # check if machine is empty
-    time.sleep(5)
+    time.sleep(10)
+    print("checking queue")
     for machine in machineList:
         for user in machine.queue:
             if user.impatience:

@@ -3,7 +3,8 @@ import numpy as np
 
 import Queues
 import machine
-
+import random
+import copy
 
 def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, currentUserMachine: object):
     """
@@ -18,35 +19,47 @@ def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, 
         maxShape = max(layout.shape[0], layout.shape[1])
         fieldOfView = int(maxShape/2+1)
     # Find index position of current machine ID in layout
-    currentMachinePosition = np.where(layout == currentUserMachine.machineID)
+    if not currentUserMachine:
+        currentMachinePosition = tuple([np.array([int(layout.shape[0]/2 + 1)]), np.array([int(layout.shape[1]/2 + 1)])])
+        start = True
+    else:
+        currentMachinePosition = np.where(layout == currentUserMachine)
+        start = False
 
     nearbyMachines = []
-
+    ids = []
+    for m in currentUser.workoutMachines:
+        ids.append(m.machineID)
     # Checking if machine is present on current floor
-    if len(currentMachinePosition[0]) != 0:
+    if len(currentMachinePosition[0]) != 0 or start:
 
         # Checking nearby cells in array for new machine(-3 to +3)
         for row in range(int(currentMachinePosition[0]) - fieldOfView,
                          int(currentMachinePosition[0]) + fieldOfView + 1):
+            if row<0 or row >= layout.shape[0]:
+                continue
             for col in range(int(currentMachinePosition[1]) - fieldOfView,
                              int(currentMachinePosition[1]) + fieldOfView + 1):
-
+                if col < 0 or col>=layout.shape[1]:
+                    continue
                 # Index array from current machine
                 try:
-                    if row >= 0 and col >= 0 and not np.isnan(layout[row][col]) \
-                            and layout[row][col] != currentUserMachine.machineID:
+                    if row >= 0 and col >= 0:
+                        currentElement = layout[row][col]
+                        if currentElement != -1 and currentElement != currentUserMachine:
 
-                        possibleMachine = layout[row][col]
+                            possibleMachine = layout[row][col]
+                            if possibleMachine.machineID in ids:
+                                nearbyMachines.append(possibleMachine)
 
 
                         # Call function to get machine queue length
                         # Add to dictionary as {mach: queueLength}
                         # Return machine with least queueLength
-                        if possibleMachine in currentUser.workoutMachines:
-                            nearbyMachines.append(possibleMachine)
 
                 except IndexError:
                     pass
+
 
         # Call best machine = queue.findBestMachine(nearbyMachines)
         # If not Call best machine , find new machine call with field of view = layout shape/2
@@ -63,7 +76,7 @@ def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, 
 
 class Layout:
 
-    def __init__(self, totalFloors: int, totalMachines: int):
+    def __init__(self, totalFloors: int):
         """
         :param totalFloors:
         :param totalMachines:
@@ -129,21 +142,27 @@ class Layout:
         for floor, machines in floorLayout.items():
 
             # Create permutations of machines on each floor
-            machineArrangement = [list(machineObj) for machineObj in permutations(machines)]
+            # machineArrangement = [list(machineObj) for machineObj in permutations(machines)]
+            machineArrangement = []
+            for x in range(100):
+                copyMachines = copy.deepcopy(machines)
+                random.shuffle(copyMachines)
+                if copyMachines not in machineArrangement:
+                    machineArrangement.append(copyMachines)
 
             if floor not in layoutCombination:
                 layoutCombination[floor] = machineArrangement
 
         return layoutCombination, machineObjects
 
-    def create_layouts(self):
+    def create_layouts(self, allMachines: list):
         """
         This function creates machine area space for all values in layoutCombination
         :return: Dict containing floor numbers as keys, multiple layouts as values (numpy arrays)
         """
 
         # Get floor layout
-        layoutCombination, machineObjects = self.create_machine_space()
+        layoutCombination, machineObjects = self.create_machine_space(allMachines)
 
         allLayouts = {}
         for floor, machineCombo in layoutCombination.items():
@@ -165,8 +184,8 @@ class Layout:
                 layoutCols = row1 * 3
 
                 # Creating empty machine space
-                machineArea = np.empty((layoutRows, layoutCols,))
-                machineArea[:] = np.nan
+                machineArea = np.empty((layoutRows, layoutCols,), dtype=object)
+                machineArea[:] = -1
 
                 index = 0
                 # Iterating over rows and columns of array

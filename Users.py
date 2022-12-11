@@ -4,37 +4,26 @@ import random
 class Users:
     ironheadType = ['rigid', 'flexible']
     ironheadPat = ['patient', 'impatient']
-
-    def __init__(self, userID: str, machines: list):
+    workoutTypes = ['Back', "Front Upper Body", "Legs", "Cardio Vascular", "Arms"]
+    def __init__(self, userID: str):
         """
         This function initializes the required parameters of a user
         :param userID: Unique ID assigned to each user
         """
-        workoutTypes = ['Back', "Front Upper Body", "Legs", "Cardio Vascular", "Arms"]
+
         self.userID = userID
         # self.userDict = userDict
         self.userType = random.choice(Users.ironheadType)
         self.workoutMachines = None
-
-        if self.userType == 'flexible':
-            self.workoutMachines = machines
-        elif self.userType == 'rigid':
-            workoutDay, workoutTypes = self.get_workout_day(workoutTypes, None)
-            self.workoutMachines = self.get_workout_machines(machines, workoutDay)
-            while True:
-                if len(machines) < 5:
-                    break
-                if len(self.workoutMachines) < 5:
-                    workoutDay = self.get_workout_day(workoutTypes, workoutDay)
-                    self.workoutMachines.extend(self.get_workout_machines(machines, workoutDay))
-                else:
-                    break
-
         self.userPatience = random.choice(Users.ironheadPat)
         self.timeDelta = 0
         self.viewPower = 6
         self.currentMachine = None
         self.currentQueueTime = None
+        self.usedMachines = 0
+
+
+
 
     @staticmethod
     def get_workout_day(possible_choices, dayToExclude):
@@ -69,21 +58,26 @@ class Users:
             self.userDict[key][-1] += elapsedTime
         return self.userDict
 
-    def assign_properties(self):
+    def assign_properties(self, machines):
         """
         Assign user properties randomly
         :return: the randomly selected type and patience and assigned viewPower and initialize time delta to 0
                  and the initialized user dictionary
         """
-        ironheadType = ['rigid', 'flexible']
-        ironheadPat = ['patient', 'impatient']
-        self.userType = random.choice(ironheadType)
-        self.userPatience = random.choice(ironheadPat)
-        self.timeDelta = 0
-        self.viewPower = 6
-        # self.userDict = {}
-        return self.userType, self.userPatience, self.timeDelta, self.viewPower
+        if self.userType == 'flexible':
+            self.workoutMachines = machines
+        elif self.userType == 'rigid':
+            workoutDay, possibleTypes = self.get_workout_day(Users.workoutTypes, None)
+            self.workoutMachines = self.get_workout_machines(machines, workoutDay)
+            # while True:
+            #     if len(machines) < 5:
+            #         break
+            #     if len(self.workoutMachines) < 5:
+            #         workoutDay = self.get_workout_day(possibleTypes, workoutDay)
+            #         self.workoutMachines.extend(self.get_workout_machines(machines, workoutDay))
+            #     else:
+            #         break
 
 
-if __name__ == "__main__":
-    passc
+# if __name__ == "__main__":
+#     pass
