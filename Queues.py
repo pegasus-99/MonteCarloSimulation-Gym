@@ -30,6 +30,7 @@ def add_user_to_queue(currentUser: object, currentMachine: object):
     #     return False
     # updating machine queue
     currentMachine.queue.append(currentUser)
+    currentMachine.machineUseStartTime = time.time()
     # updating users' current queue
     currentUser.currentMachine = currentMachine
     currentUser.currentQueueTime = time.time()
@@ -37,7 +38,7 @@ def add_user_to_queue(currentUser: object, currentMachine: object):
     # return True
 
 
-def check_queue(machineList: object, currentLayout: object):
+def check_queue(machineList: object, currentLayout: object, threadsStartTime):
     """
 
     :param machineList: list of machines
@@ -46,18 +47,25 @@ def check_queue(machineList: object, currentLayout: object):
     # run this piece of code in a thread
     # check for impatient user
     # check if machine is empty
-    time.sleep(8)
-    print("checking queue")
-    for currentMachine in machineList:
-        for user in currentMachine.queue:
-            if user.impatience:
-                if (time.time() - user.currentQueueTime) > user.impatientTime or user.userType == 'flexible':
-                    if user.usedMachines <= 5:
-                        newMachine = layout.find_new_machine(user, 5, currentLayout, currentMachine)
-                        if len(newMachine.queue) == len(currentMachine.queue):
-                            newMachine = layout.find_new_machine(user, None, currentLayout, currentMachine)
-                        Queues.add_user_to_queue(user, newMachine)
-                    # find new machine using Layout --->  Layout.find_new_machine(user, user.currentMachine)
+    while True:
+        if (time.time() - threadsStartTime) >= 300:
+            return
+        time.sleep(8)
+        print("checking queue")
+        for currentMachine in machineList:
+            for user in currentMachine.queue:
+                if user.userPatience == 'impatient':
+                    if (time.time() - user.currentQueueTime) > user.impatientTime or user.userType == 'flexible':
+                        if user.usedMachines <= 5:
+                            try:
+                                newMachine = layout.find_new_machine(user, 5, currentLayout, currentMachine)
+                                if len(newMachine.queue) == len(currentMachine.queue):
+                                    newMachine = layout.find_new_machine(user, None, currentLayout, currentMachine)
+                                remove_from_queue(currentMachine, user)
+                                Queues.add_user_to_queue(user, newMachine)
+                            except AttributeError:
+                                continue
+                        # find new machine using Layout --->  Layout.find_new_machine(user, user.currentMachine)
 
 
 def remove_from_queue(currentMachine: object, currentUser: object):
@@ -68,9 +76,10 @@ def remove_from_queue(currentMachine: object, currentUser: object):
     """
     try:
         currentMachine.queue.remove(currentUser)
-        return True
+        # return True
     except Exception as e:
-        return False
+        # return False
+        pass
 
 
 def get_best_machine(machines, currentMachine):
@@ -80,12 +89,15 @@ def get_best_machine(machines, currentMachine):
     """
     leastQueueMachine = None
     for mach in machines:
-        if not leastQueueMachine:
+        if not currentMachine:
+            leastQueueMachine = mach
+            currentMachine = True
+            continue
+        if not leastQueueMachine and currentMachine:
             leastQueueMachine = currentMachine
-        elif len(mach.queue) == 0 and len(leastQueueMachine.queue) == 0:
-            leastQueueMachine = currentMachine
+            continue
         # it compares arrays with none values... 6, 6 dono ka len --  asically remove all nones and compare only actual values
-        elif len(mach.queue) < len(leastQueueMachine.queue):
+        if len(mach.queue) < len(leastQueueMachine.queue):
             leastQueueMachine = mach
     return leastQueueMachine
 

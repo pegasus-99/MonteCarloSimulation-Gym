@@ -45,58 +45,69 @@ def calculate_metrics():
 # running the simulation
 def gym_simulation():
     print("Simulation Started")
-    global allLayouts, allUsers, currentLayout
+    global allLayouts
+    global allUsers
+    global currentLayout
+    iter1 = False
     for layoutIter in allLayouts[1]:
-        currentLayout = layout
+        currentLayout = layoutIter
         calculate_metrics()
         print("__________________________________________________________________")
         print("STARTING to test a new LAYOUT")
-        for user in allUsers:
-            user.reset_user()
-        for machine in allMachines:
-            machine.reset_machine()
+        if iter1:
+            for userIteration in allUsers:
+                userIteration.reset_user()
+                userIteration.assign_properties(allMachines)
+            for machineIteration in allMachines:
+                machineIteration.reset_machine()
+            iter1 = True
         print("__________________________________________________________________")
         # reset all machines  and users for the current layout
         for userIter in allUsers:
-            if user.usedMachines <= 5:
+            if userIter.usedMachines <= 5:
                 machineFound = layout.find_new_machine(userIter, None, layoutIter, None)
                 Queues.add_user_to_queue(userIter, machineFound)
         # call process variables to process the variables for current simulation
 
         # after adding all users to te gym:
+        threadsStartTime = time.time()
         # thread1: check for impatient users -- run Queues.check_queue()
-        impatientCheck = threading.Thread(target=Queues.check_queue, args=(allMachines, layoutIter,))
+        impatientCheck = threading.Thread(target=Queues.check_queue, args=(allMachines, layoutIter, threadsStartTime))
         # thread2: update machines: run Machine.check_machine()
-        machineCheck = threading.Thread(target=machine.check_machine, args=(currentLayout, allMachines))
+        machineCheck = threading.Thread(target=machine.check_machine, args=(layoutIter, allMachines, threadsStartTime))
         # thread3: print_output from main
-        printOutput = threading.Thread(target=print_output)
+        printOutput = threading.Thread(target=print_output, args=(threadsStartTime, ))
         impatientCheck.start()
         machineCheck.start()
         printOutput.start()
-        time.sleep(300)
+        time.sleep(320)
         # write code to make threads work only for 300 seconds
 
 
-def print_output():
-    global currentLayout
-    time.sleep(12)
-    # print("There are currently "+""+"users in the gym"+""+"out of which x are using the machines, z are in queue andy"
-    #                                                       "are waiting/finding new machine")
-    # print("Layout currently being tested is :")
-    # print("Machine most used by the users is :")
-    # print("Best Layout efficiency as far as now is for ") # L.E = time spent by users currently on machines/total time
-    currentUsers = 0
-    usedMachines = 0
-    for machineObject in allMachines:
-        currentUsers += len([x for x in machineObject.queue if x is not None])
-        if currentUsers > 0:
-            usedMachines += 1
-    print("__________________________________________________________________")
-    print("PERIODIC OUTPUT")
-    print("currently the number of people in the gym either on machines or working out is: " + str(currentUsers))
-    print("number of machines being used: " + str(usedMachines))
-    print("layout currently being used:")
-    print(currentLayout)
+def print_output(threadsStartTime):
+    while True:
+        if (time.time() - threadsStartTime) >= 300:
+            return
+
+        global currentLayout
+        time.sleep(12)
+        # print("There are currently "+""+"users in the gym"+""+"out of which x are using the machines, z are in queue andy"
+        #                                                       "are waiting/finding new machine")
+        # print("Layout currently being tested is :")
+        # print("Machine most used by the users is :")
+        # print("Best Layout efficiency as far as now is for ") # L.E = time spent by users currently on machines/total time
+        currentUsers = 0
+        usedMachines = 0
+        for machineObject in allMachines:
+            currentUsers += len([x for x in machineObject.queue if x is not None])
+            if currentUsers > 0:
+                usedMachines += 1
+        print("__________________________________________________________________")
+        print("PERIODIC OUTPUT")
+        print("currently the number of people in the gym either on machines or working out is: " + str(currentUsers))
+        print("number of machines being used: " + str(usedMachines))
+        print("layout currently being used:")
+        print(currentLayout[1][1])
 
 
 if __name__ == "__main__":
@@ -117,8 +128,14 @@ if __name__ == "__main__":
             except ValueError:
                 print("Please enter an integer for the number of machines, try again")
     layoutObject = layout.Layout(1)
-    allLayouts, allMachines = layoutObject.create_layouts(createLayoutInput)
-
+    allLayouts = layoutObject.create_layouts(createLayoutInput)
+    allMachines = []
+    for row in allLayouts[1][0]:
+        for data in row:
+            if data == -1:
+                continue
+            else:
+                allMachines.append(data)
     while True:
         try:
             userCount = int(input("Enter the number of users you expect in the gym: "))

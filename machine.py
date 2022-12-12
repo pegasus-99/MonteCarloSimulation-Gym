@@ -29,24 +29,35 @@ class Machine:
     # user.elapsed_time += 5
 
 
-def check_machine(currentLayout, machines):
+def check_machine(currentLayout, machines, threadsStartTime):
     """
     :param currentLayout:
     :param machines:
     :return:
     """
     # temp = []
-    time.sleep(5)
-    for machine in machines:
-        if time.time() - machine.machineUseStartTime >= 5:
-            machine.machineUseStartTime = time.time()
-            exitUser = machine.queue.pop(0)
-            # exitUser.elapsedTime+=10
-            exitUser.usedMachines += 1
-            if exitUser.usedMachines <= 5:
-                newMachine = layout.find_new_machine(exitUser, 5, currentLayout, machine)
-                if len(newMachine.queue) == len(machine.queue):
-                    newMachine = layout.find_new_machine(exitUser, None, currentLayout, machine)
-                Queues.add_user_to_queue(exitUser, newMachine)
-            else:
-                pass
+    while True:
+        if (time.time() - threadsStartTime) >= 300:
+            return
+
+        print('checking machine')
+        time.sleep(6)
+        for machine in machines:
+            if time.time() - machine.machineUseStartTime >= 5:
+                machine.machineUseStartTime = time.time()
+                exitUser = machine.queue.pop(0)
+                # exitUser.elapsedTime+=10
+                exitUser.usedMachines += 1
+                if exitUser.usedMachines <= 5:
+                    try:
+                        newMachine = layout.find_new_machine(exitUser, 5, currentLayout, machine)
+                        if not newMachine:
+                            newMachine = layout.find_new_machine(exitUser, None, currentLayout, machine)
+                        if len(newMachine.queue) == len(machine.queue):
+                            newMachine = layout.find_new_machine(exitUser, None, currentLayout, machine)
+                        Queues.remove_from_queue(machine, exitUser)
+                        Queues.add_user_to_queue(exitUser, newMachine)
+                    except AttributeError:
+                        continue
+                else:
+                    pass

@@ -65,17 +65,17 @@ def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, 
 
         # Call best machine = queue.findBestMachine(nearbyMachines)
         # If not Call best machine , find new machine call with field of view = layout shape/2
-        bestMachine = Queues.get_best_machine(nearbyMachines)
-        if not bestMachine:
-            find_new_machine(currentUser, fieldOfView, layout, currentUserMachine)
-            # If best machine is not found then go the nearby machine.
-        else:
-            return nearbyMachines
+        bestMachine = Queues.get_best_machine(nearbyMachines, currentUserMachine)
+        # if not bestMachine:
+        #     find_new_machine(currentUser, fieldOfView, layout, currentUserMachine)
+        #     # If best machine is not found then go the nearby machine.
+        # else:
+        #     return nearbyMachines
+        return bestMachine
 
     # If machine not in current floor
     else:
-        print("Machine not on this floor")
-
+        find_new_machine(currentUser, None, layout, None)
 
 class Layout:
 
@@ -126,7 +126,7 @@ class Layout:
                 machineID += 1
                 tempMachine = machine.Machine(machineID=machineID, useTime=mach[2], peopleCount=mach[1],
                                               machineType=mach[0])
-                machineObjects.append(tempMachine)
+                # machineObjects.append(tempMachine)
                 if tempMachine.machineID <= machinesOnFloor:
                     # currentMachine = machine.Machine(machineID = mach+1, useTime= , )
 
@@ -156,7 +156,7 @@ class Layout:
             if floor not in layoutCombination:
                 layoutCombination[floor] = machineArrangement
 
-        return layoutCombination, machineObjects
+        return layoutCombination
 
     def create_layouts(self, allMachines: list):
         """
@@ -165,7 +165,7 @@ class Layout:
         """
 
         # Get floor layout
-        layoutCombination, machineObjects = self.create_machine_space(allMachines)
+        layoutCombination = self.create_machine_space(allMachines)
 
         allLayouts = {}
         for floor, machineCombo in layoutCombination.items():
@@ -206,7 +206,7 @@ class Layout:
 
                 allLayouts[floor].append(machineArea)
 
-        return allLayouts, machineObjects
+        return allLayouts
 
     def get(self):
         pass
