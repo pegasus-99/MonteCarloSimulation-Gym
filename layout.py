@@ -8,18 +8,21 @@ import copy
 import sys
 sys.setrecursionlimit(5000)
 
+
 def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, currentUserMachine: object):
     """
-    :param currentUser:
-    :param fieldOfView:
-    :param layout:
-    :param currentUserMachine:
+    :param currentUser: Information about user
+    :param fieldOfView: How far can the user see
+    :param layout: Numpy array consisting of machine information
+    :param currentUserMachine: Information about machine
     :return:
+
     """
-    # search the whole gym instead of field of view
+    # Search the whole gym instead of field of view
     if not fieldOfView:
         maxShape = max(layout.shape[0], layout.shape[1])
         fieldOfView = int(maxShape/2+1)
+
     # Find index position of current machine ID in layout
     if not currentUserMachine:
         currentMachinePosition = tuple([np.array([int(layout.shape[0]/2 + 1)]), np.array([int(layout.shape[1]/2 + 1)])])
@@ -32,18 +35,22 @@ def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, 
     ids = []
     for m in currentUser.workoutMachines:
         ids.append(m.machineID)
+
     # Checking if machine is present on current floor
     if len(currentMachinePosition[0]) != 0 or start:
 
         # Checking nearby cells in array for new machine(-3 to +3)
         for row in range(int(currentMachinePosition[0]) - fieldOfView,
                          int(currentMachinePosition[0]) + fieldOfView + 1):
-            if row<0 or row >= layout.shape[0]:
+
+            if row < 0 or row >= layout.shape[0]:
                 continue
+
             for col in range(int(currentMachinePosition[1]) - fieldOfView,
                              int(currentMachinePosition[1]) + fieldOfView + 1):
-                if col < 0 or col>=layout.shape[1]:
+                if col < 0 or col >= layout.shape[1]:
                     continue
+
                 # Index array from current machine
                 try:
                     if row >= 0 and col >= 0:
@@ -53,7 +60,6 @@ def find_new_machine(currentUser: object, fieldOfView: int, layout: np.ndarray, 
                             possibleMachine = layout[row][col]
                             if possibleMachine.machineID in ids:
                                 nearbyMachines.append(possibleMachine)
-
 
                         # Call function to get machine queue length
                         # Add to dictionary as {mach: queueLength}
@@ -82,16 +88,16 @@ class Layout:
     def __init__(self, totalFloors: int):
         """
         :param totalFloors:
-        :param totalMachines:
         """
         # self.totalFloors = totalFloors
         # self.allMachines = allMachines
-        # self.totalMachines = totalMachines
+        #self.totalMachines = totalMachines
         self.totalFloors = totalFloors
 
     def create_machine_space(self, allMachines: list):
         """
         :return: number of rows:int, number of columns:int, nested list containing unique machine numbers
+        >>>
         """
 
         # Get total machines from Machine  module? Data Structure = List
@@ -124,8 +130,15 @@ class Layout:
             machineID = 0
             for mach in allMachines:
                 machineID += 1
-                tempMachine = machine.Machine(machineID=machineID, useTime=mach[2], peopleCount=mach[1],
-                                              machineType=mach[0])
+
+                # Error handling for temp machine creation
+                try:
+                    tempMachine = machine.Machine(machineID=machineID, useTime=mach[2], peopleCount=mach[1],
+                                                  machineType=mach[0])
+                except TypeError:
+                    tempMachine = mach
+                    tempMachine.machineID = machineID
+
                 machineObjects.append(tempMachine)
                 if tempMachine.machineID <= machinesOnFloor:
                     # currentMachine = machine.Machine(machineID = mach+1, useTime= , )
