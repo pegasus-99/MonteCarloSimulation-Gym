@@ -1,17 +1,21 @@
 import random
 import sys
+
 sys.setrecursionlimit(5000)
+
 
 class Users:
     ironheadType = ['rigid', 'flexible']
     ironheadPat = ['patient', 'impatient']
     workoutTypes = ['Back', "Front Upper Body", "Legs", "Cardio Vascular", "Arms"]
+
     def __init__(self, userID: str):
         """
         This function initializes the required parameters of a user
         :param userID: Unique ID assigned to each user
         """
 
+        self.impatientTime = None
         self.userID = userID
         # self.userDict = userDict
         self.userType = random.choice(Users.ironheadType)
@@ -22,9 +26,16 @@ class Users:
         self.currentMachine = None
         self.currentQueueTime = None
         self.usedMachines = 0
+        self.elapsedTime = 0
 
-
-
+    def reset_user(self):
+        # self.userDict = userDict
+        self.workoutMachines = None
+        self.timeDelta = 0
+        self.currentMachine = None
+        self.currentQueueTime = None
+        self.usedMachines = 0
+        self.elapsedTime = 0
 
     @staticmethod
     def get_workout_day(possible_choices, dayToExclude):
@@ -86,6 +97,11 @@ class Users:
         :return: the randomly selected type and patience and assigned viewPower and initialize time delta to 0
                  and the initialized user dictionary
         """
+        if self.userPatience == 'patient':
+            self.impatientTime = 1000
+        else:
+            self.impatientTime = 15
+
         if self.userType == 'flexible':
             self.workoutMachines = machines
         elif self.userType == 'rigid':
@@ -99,7 +115,6 @@ class Users:
             #         self.workoutMachines.extend(self.get_workout_machines(machines, workoutDay))
             #     else:
             #         break
-
 
 # if __name__ == "__main__":
 #     pass
