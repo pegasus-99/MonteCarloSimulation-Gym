@@ -45,7 +45,12 @@ def check_machine(currentLayout, machines, threadsStartTime):
         for machine in machines:
             if time.time() - machine.machineUseStartTime >= 5:
                 machine.machineUseStartTime = time.time()
-                exitUser = machine.queue.pop(0)
+
+                try:
+                    exitUser = machine.queue.pop(0)
+                except IndexError:
+                    print("Queue is empty")
+
                 # exitUser.elapsedTime+=10
                 exitUser.usedMachines += 1
                 if exitUser.usedMachines <= 5:
